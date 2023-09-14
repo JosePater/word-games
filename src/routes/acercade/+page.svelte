@@ -10,6 +10,6 @@
 		Contador de palabras repetidas
 	</p>
 
-	<pre>npm create svelte@latest</pre>
+	<pre>Creador: José Paternina</pre>
 
 </div>

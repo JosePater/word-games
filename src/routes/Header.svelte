@@ -9,10 +9,10 @@
 		</svg>
 		<ul>
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
+				<a href="/">Inicio</a>
 			</li>
 			<li aria-current={$page.url.pathname === '/acercade' ? 'page' : undefined}>
-				<a href="/acercade">About</a>
+				<a href="/acercade">A cerca de</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
