@@ -1,11 +1,16 @@
 <script>
   let prompt = '';
-  let tabla = false;
+  let table_enabled = false;
+  let omitir = 'No'; 
+  let OmitWord_enabled = false; // input palabras a omitir: deshabilitado
 
   // Palabras y singnos a omitir
   let omitWords = ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
   let signos = ['.', ',', ';', ':', '?', '!', '¿']; 
   let words = new Map();
+  
+  $: if (omitir == "Sí") { OmitWord_enabled = true}
+  	else if (omitir == 'No') { OmitWord_enabled = false}
 
   function filterWords() {
     let allWords_signs = prompt.split(' '); // Array de palabras de la perícopa
@@ -44,10 +49,8 @@
         words.delete(key);
       }
     });
-	tabla = true;
-	
+    table_enabled = true;
   }
-
 </script>
 
 <svelte:head>
@@ -63,43 +66,64 @@
       <h5 class="card-title fs-1">Contador de palabras</h5>
       <div class="form-floating">
         <textarea
-          id="text1" placeholder="Escribe el texto"
+          id="text1"
+          placeholder="Escribe el texto"
           style="height: 150px"
           class="form-control"
           bind:value={prompt}
         />
       </div>
-      <div class="row mt-4">
+      <div class="row mt-3">
+        <label for="">Omitir palabras</label>
+        <div class="col-2 mb-2">
+          <select bind:value={omitir} class="form-select">
+			      <option selected value="No">No</option>
+            <option value="Sí">Sí</option>
+          </select>
+        </div>
+
+        {#if OmitWord_enabled}
+          <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1" >Palabras a omitir:</span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Separar con coma: el, la, los, las..."
+              aria-label="Username"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+        {/if}
         <div class="col-8">
-          <button class="btn btn-primary" on:click={filterWords}>Aceptar</button>
+          <button class="btn btn-primary mb-2" on:click={filterWords}>Aceptar</button
+          >
         </div>
       </div>
     </div>
   </div>
-  
-  {#if tabla}
-  <div class="card shadow p-3 mb-5 bg-body rounded">
-	<table class="table">
-		<thead>
-		  <tr>
-			<th scope="col">#</th>
-			<th scope="col">Palabras</th>
-			<th scope="col"># Repeticiones</th>
-			<th scope="col">Borrar</th>
-		  </tr>
-		</thead>
-		<tbody>
-		  {#each words.entries() as [key, value], i}
-			<tr>
-				<th scope="row">{i+1}</th>
-				<td>{key}</td>
-				<td>{value}</td>
-				<td><button class="btn btn-danger">Borrar</button></td>
-			  </tr>
-		  {/each}
-		</tbody>
-	  </table>
-  </div>
+
+  {#if table_enabled}
+    <div class="card shadow p-3 mb-5 bg-body rounded">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Palabras</th>
+            <th scope="col"># Repeticiones</th>
+            <th scope="col">Borrar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each words.entries() as [key, value], i}
+            <tr>
+              <th scope="row">{i + 1}</th>
+              <td>{key}</td>
+              <td>{value}</td>
+              <td><button class="btn btn-danger">Borrar</button></td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
   {/if}
-  
 </section>
