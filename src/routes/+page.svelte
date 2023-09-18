@@ -1,15 +1,17 @@
 <script>
   $: prompt = '';
   $: table_enabled = false;
-  $: omitir = 'No'; 
+  let omitir = 'No'; 
   $: OmitWord_enabled = false; // input palabras a omitir: deshabilitado
+  let numberLetters = '3'; // Cantidad de letras 
 
-  // Palabras y singnos a omitir
+  // Palabras y signos a omitir
   let omitWords = []; // ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
   let signos = ['.', ',', ';', ':', '?', '!', '¿']; 
   let words = new Map();
 
   $: omitir == "Sí" ? OmitWord_enabled = true : (OmitWord_enabled = false, omitWords = [], actualizar());
+  $: numberLetters > 0 ? actualizar() : actualizar();
 
   function actualizar() {
     setTimeout(() => {
@@ -40,7 +42,7 @@
 
     // Quitar las palabras omitidas y las <= x letras
     allWords_signs.forEach((palabra) => {
-      if (palabra.length > 2 && !omitWords.includes(palabra)) {
+      if (palabra.length >= numberLetters && !omitWords.includes(palabra)) {
         let palabraSinSignos = palabra;
         signos.forEach((sig) => {
           palabraSinSignos = palabraSinSignos.replaceAll(`${sig}`, ``);
@@ -52,7 +54,7 @@
     // Contar la cantidad de vez que aparece una palabra
     words_without_signs.forEach((palabra) => {
       let cant = 1;
-      if (palabra.length > 2) {
+      if (palabra.length >= numberLetters) {
         if (!omitWords.includes(palabra)) {
           if (words.has(palabra)) {
             cant = words.get(palabra) + 1;
@@ -97,16 +99,33 @@
         />
       </div>
       <div class="row mt-3">
-        <label for="">Omitir palabras</label>
+        <h4>Filtrar palabras</h4>
         <div class="col-2 mb-2">
+          <label for="">Omitir palabras</label>
           <select bind:value={omitir} class="form-select">
 			      <option selected value="No">No</option>
             <option value="Sí">Sí</option>
           </select>
         </div>
+       
+        <div class="col-2 mb-2">
+          <label for="">Cantidad letras</label>
+          <select  bind:value={numberLetters} class="form-select">
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option selected value=3>3</option>
+            <option value=4>4</option>
+            <option value=5>5</option>
+            <option value=6>6</option>
+            <option value=7>7</option>
+            <option value=8>8</option>
+            <option value=9>9</option>
+            <option value=10>10</option>
+          </select>
+        </div>
 
         {#if OmitWord_enabled}
-          <div class="input-group mb-2">
+          <div class="input-group mb-2 mt-2">
             <span class="input-group-text" id="basic-addon1" >Palabras a omitir:</span>
             <input
               type="text"
@@ -120,7 +139,7 @@
           </div>
         {/if}
         <div class="col-8">
-          <button class="btn btn-primary mb-2" on:click={valideData}>Aceptar</button>
+          <button class="btn btn-primary mt-3" on:click={valideData}>Aceptar</button>
         </div>
       </div>
     </div>
