@@ -5,15 +5,24 @@
   let OmitWord_enabled = false; // input palabras a omitir: deshabilitado
 
   // Palabras y singnos a omitir
-  let omitWords = ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
+  let omitWords = []; // ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
   let signos = ['.', ',', ';', ':', '?', '!', '¿']; 
   let words = new Map();
-  
-  $: if (omitir == "Sí") { OmitWord_enabled = true}
-  	else if (omitir == 'No') { OmitWord_enabled = false}
+
+  $: omitir == "Sí" ? OmitWord_enabled = true : OmitWord_enabled = false;
+    
+  function valideData() {
+    if (prompt.trim() != '') {
+      filterWords();
+    } else {
+      table_enabled = false;
+      console.log('Datos vacíos');
+    }
+  }
 
   function filterWords() {
-    let allWords_signs = prompt.split(' '); // Array de palabras de la perícopa
+    words.clear(); 
+    let allWords_signs = prompt.split(' '); // Array de palabras del prompt
     let words_without_signs = []; // Palabras filtradas (omitidas y tamaño)
 
     // Quitar las palabras omitidas y las <= x letras
@@ -91,39 +100,43 @@
               placeholder="Separar con coma: el, la, los, las..."
               aria-label="Username"
               aria-describedby="basic-addon1"
+              bind:value={omitWords}
             />
           </div>
         {/if}
         <div class="col-8">
-          <button class="btn btn-primary mb-2" on:click={filterWords}>Aceptar</button
-          >
+          <button class="btn btn-primary mb-2" on:click={valideData}>Aceptar</button>
         </div>
       </div>
     </div>
   </div>
-
+  
   {#if table_enabled}
     <div class="card shadow p-3 mb-5 bg-body rounded">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Palabras</th>
-            <th scope="col"># Repeticiones</th>
-            <th scope="col">Borrar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each words.entries() as [key, value], i}
+      {#if words.size > 0}
+        <table class="table">
+          <thead>
             <tr>
-              <th scope="row">{i + 1}</th>
-              <td>{key}</td>
-              <td>{value}</td>
-              <td><button class="btn btn-danger">Borrar</button></td>
+              <th scope="col">#</th>
+              <th scope="col">Palabras</th>
+              <th scope="col"># Repeticiones</th>
+              <th scope="col">Borrar</th>
             </tr>
-          {/each}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {#each words.entries() as [key, value], i}
+              <tr>
+                <th scope="row">{i + 1}</th>
+                <td>{key}</td>
+                <td>{value}</td>
+                <td><button class="btn btn-danger">Borrar</button></td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {:else}
+        <h3>No hay palabras repetidas</h3>
+      {/if}
     </div>
   {/if}
 </section>
