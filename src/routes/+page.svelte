@@ -17,6 +17,13 @@
     }, 300, table_enabled = false)  
   }
 
+  function borrar(key) {
+    setTimeout(() => {
+      words.delete(key);
+      table_enabled = true;
+    }, 100, table_enabled = false)  
+  }
+
   function valideData() {
     if (prompt.trim() != '') {
       actualizar();
@@ -137,7 +144,14 @@
                 <th scope="row">{i + 1}</th>
                 <td>{key}</td>
                 <td>{value}</td>
-                <td><button class="btn btn-danger">Borrar</button></td>
+                <td>
+                  <button
+                    class="btn btn-danger"
+                    on:click={() => {
+                      borrar(key)
+                    }}>Borrar</button
+                  >
+                </td>
               </tr>
             {/each}
           </tbody>
