@@ -1,19 +1,25 @@
 <script>
-  let prompt = '';
-  let table_enabled = false;
-  let omitir = 'No'; 
-  let OmitWord_enabled = false; // input palabras a omitir: deshabilitado
+  $: prompt = '';
+  $: table_enabled = false;
+  $: omitir = 'No'; 
+  $: OmitWord_enabled = false; // input palabras a omitir: deshabilitado
 
   // Palabras y singnos a omitir
   let omitWords = []; // ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
   let signos = ['.', ',', ';', ':', '?', '!', '¿']; 
   let words = new Map();
 
-  $: omitir == "Sí" ? OmitWord_enabled = true : OmitWord_enabled = false;
-    
+  $: omitir == "Sí" ? OmitWord_enabled = true : (OmitWord_enabled = false, omitWords = [], actualizar());
+
+  function actualizar() {
+    setTimeout(() => {
+      filterWords()
+    }, 300, table_enabled = false)  
+  }
+
   function valideData() {
     if (prompt.trim() != '') {
-      filterWords();
+      actualizar();
     } else {
       table_enabled = false;
       console.log('Datos vacíos');
@@ -80,6 +86,7 @@
           style="height: 150px"
           class="form-control"
           bind:value={prompt}
+          on:input={actualizar} 
         />
       </div>
       <div class="row mt-3">
@@ -101,6 +108,7 @@
               aria-label="Username"
               aria-describedby="basic-addon1"
               bind:value={omitWords}
+              on:input={actualizar}
             />
           </div>
         {/if}
