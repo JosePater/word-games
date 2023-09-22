@@ -11,7 +11,7 @@
 	</main>
 
 	<footer>
-		<p>José Paternina</p>
+		&copy; 2023 
 	</footer>
 </div>
 
