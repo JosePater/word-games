@@ -6,6 +6,7 @@
   let numberLetters = '3'; // Cantidad de letras 
   let isChecked = false; // Checkbox Aaa == aaa
   let mensaje = '';
+  let inicio = false;
 
   // Palabras y signos a omitir
   let omitWords = []; // ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
@@ -15,11 +16,18 @@
   $: omitir == "Sí" ? OmitWord_enabled = true : (OmitWord_enabled = false, omitWords = [], actualizar());
   $: numberLetters > 0 ? actualizar() : actualizar();
 
+  function iniciar() {
+    inicio = true;
+    actualizar();
+  }
+
   function actualizar() {
-    prompt.trim() != '' ?  mensaje = '😎 ¡No hay palabras repetidas!' : mensaje = '😜 ¡No hay texto!';
-    setTimeout(() => {
-      filterWords()
-    }, 300, table_enabled = false)  
+    if (inicio) {
+      prompt.trim() != '' ?  mensaje = '😎 ¡No hay palabras repetidas!' : mensaje = '😜 ¡No hay texto!';
+      setTimeout(() => {
+          filterWords()
+      }, 300, table_enabled = false)  
+    }
   }
 
   function borrar(key) {
@@ -142,7 +150,7 @@
           </div>
         {/if}
         <div class="col size-screen">
-          <button class="btn btn-primary w-100" on:click={actualizar}><b>Aceptar</b></button>
+          <button class="btn btn-primary w-100" on:click={iniciar}><b>Aceptar</b></button>
         </div>
       </div>
     </div>
