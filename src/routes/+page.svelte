@@ -46,7 +46,7 @@
       }
     });
 
-    // Contar la cantidad de vez que aparece una palabra
+    // Contar la cantidad de veces que aparece una palabra
     words_without_signs.forEach((palabra) => {
       let cant = 1;
       // Check Aaaa != aaaa
@@ -56,8 +56,8 @@
       if (palabra.length >= numberLetters) {
         if (!omitWords.includes(palabra)) {
           if (words.has(palabra)) {
-            cant = words.get(palabra) + 1;
-            words.set(palabra, cant); // Sumar las palabras repetidas
+            cant = words.get(palabra) + 1;  // Sumar las palabras repetidas
+            words.set(palabra, cant);
           }
           if (!words.has(palabra)) {
             words.set(palabra, cant);
@@ -82,11 +82,11 @@
 </svelte:head>
 
 <section>
-  <h1>BIENVENIDOS</h1>
+  <h1><b>CONTADOR DE PALABRAS</b></h1>
 
-  <div class="card shadow p-3 mb-4 bg-body rounded">
+  <div class="card shadow p-3 mb-4 bg-body rounded mx-auto">
     <div class="card-body">
-      <h5 class="card-title fs-1">Contador de palabras</h5>
+      <h5 class="card-title fs-1">Ingresa un texto</h5>
       <div class="form-floating mb-5">
         <textarea
           placeholder="Escribe el texto"
@@ -95,9 +95,9 @@
           bind:value={prompt}
         />
       </div>
-      <div class="row mt-2">
-        <h4>Filtrar palabras</h4>
-        <div class="col-2 mb-2">
+      <div class="row mt-2 d-flex justify-content-center align-items-center">
+        <h3>Filtrar palabras</h3>
+        <div class="col-2 mb-2 size-screen">
           <label for="">Omitir palabras</label>
           <select bind:value={omitir} class="form-select">
 			      <option selected value="No">No</option>
@@ -105,7 +105,7 @@
           </select>
         </div>
        
-        <div class="col-3">
+        <div class="col-3 size-screen2">
           <label for="">Cantidad min. letras</label>
           <select  bind:value={numberLetters} class="form-select">
             <option value=1>1</option>
@@ -121,7 +121,7 @@
           </select>
         </div>
         
-        <div class="col mt-4">
+        <div class="col size-screen">
           <label>
             <input type="checkbox" bind:checked={isChecked} on:input={actualizar} />
             Distinguir entre Mayúsculas y minúsculas
@@ -133,7 +133,7 @@
             <span class="input-group-text">Palabras a omitir:</span>
             <input
               type="text"
-              class="form-control"
+              class="form-control size-screen3"
               placeholder="Separar con coma: el, la, los, las..."
               aria-label="Username"
               aria-describedby="basic-addon1"
@@ -141,7 +141,7 @@
             />
           </div>
         {/if}
-        <div class="col d-flex justify-content-center">
+        <div class="col size-screen">
           <button class="btn btn-primary w-100" on:click={actualizar}><b>Aceptar</b></button>
         </div>
       </div>
@@ -149,15 +149,15 @@
   </div>
   
   {#if table_enabled}
-    <div class="card shadow p-3 mb-5 bg-body rounded">
+    <div class="card shadow p-3 mb-4 bg-body rounded mx-auto size-screen4">
       {#if words.size > 0}
-        <table class="table text-center">
+        <table class="table">
           <thead>
             <tr>
-              <th scope="col" class="col-1">#</th>
-              <th scope="col" class="col-2">Palabras ({words.size})</th>
-              <th scope="col" class="col-1"># Repeticiones</th>
-              <th scope="col" class="col-2">Borrar</th>
+              <th scope="col">#</th>
+              <th scope="col">Palabras ({words.size})</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Borrar</th>
             </tr>
           </thead>
           <tbody>
@@ -184,3 +184,32 @@
     </div>
   {/if}
 </section>
+
+<style>
+  @media screen and (max-width:800px){
+    .size-screen{
+        display: block;
+        width: fit-content;
+    }
+    .size-screen3{
+        width: fit-content;
+    }
+  }
+  @media screen and (max-width:485px){
+    .size-screen2{
+        display: block;
+        width: fit-content;
+    }
+  }
+  @media screen and (max-width:460px){
+    .size-screen4{
+        display: block;
+        overflow: auto;
+    }
+    table, button{
+      font-size: 13px;
+      margin: 0;
+      padding: 5px;
+    }
+  }
+</style>
