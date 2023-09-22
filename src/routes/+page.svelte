@@ -4,16 +4,19 @@
   let omitir = 'No'; 
   $: OmitWord_enabled = false; // input palabras a omitir: deshabilitado
   let numberLetters = '3'; // Cantidad de letras 
+  let isChecked = false; // Checkbox Aaa == aaa
+  let mensaje = '';
 
   // Palabras y signos a omitir
   let omitWords = []; // ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
-  let signos = ['.', ',', ';', ':', '?', '!', '¿']; 
+  let signos = ['.', ',', ';', ':', '?', '!', '¿',"'",'"']; 
   let words = new Map();
 
   $: omitir == "Sí" ? OmitWord_enabled = true : (OmitWord_enabled = false, omitWords = [], actualizar());
   $: numberLetters > 0 ? actualizar() : actualizar();
 
   function actualizar() {
+    prompt.trim() != '' ?  mensaje = '😎 ¡No hay palabras repetidas!' : mensaje = '😜 ¡No hay texto!';
     setTimeout(() => {
       filterWords()
     }, 300, table_enabled = false)  
@@ -26,17 +29,8 @@
     }, 100, table_enabled = false)  
   }
 
-  function valideData() {
-    if (prompt.trim() != '') {
-      actualizar();
-    } else {
-      table_enabled = false;
-      console.log('Datos vacíos');
-    }
-  }
-
   function filterWords() {
-    words.clear(); 
+    words.clear();
     let textWithoutLineBreaks = prompt.replace(/\n/g, ' '); // Reemplaza '\n' por ' '
     let allWords_signs = textWithoutLineBreaks.split(' '); // Array de palabras del prompt
     let words_without_signs = []; // Palabras filtradas (omitidas y tamaño)
@@ -55,6 +49,10 @@
     // Contar la cantidad de vez que aparece una palabra
     words_without_signs.forEach((palabra) => {
       let cant = 1;
+      // Check Aaaa != aaaa
+      if (isChecked == false){
+        palabra = palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();; // Aaaa
+      }
       if (palabra.length >= numberLetters) {
         if (!omitWords.includes(palabra)) {
           if (words.has(palabra)) {
@@ -79,27 +77,25 @@
 </script>
 
 <svelte:head>
-  <title>Home</title>
+  <title>Palabras repetidas</title>
   <meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 <section>
   <h1>BIENVENIDOS</h1>
 
-  <div class="card shadow p-3 mb-5 bg-body rounded">
+  <div class="card shadow p-3 mb-4 bg-body rounded">
     <div class="card-body">
       <h5 class="card-title fs-1">Contador de palabras</h5>
-      <div class="form-floating">
+      <div class="form-floating mb-5">
         <textarea
-          id="text1"
           placeholder="Escribe el texto"
-          style="height: 150px"
+          style="height: 200px"
           class="form-control"
           bind:value={prompt}
-          on:input={actualizar} 
         />
       </div>
-      <div class="row mt-3">
+      <div class="row mt-2">
         <h4>Filtrar palabras</h4>
         <div class="col-2 mb-2">
           <label for="">Omitir palabras</label>
@@ -109,8 +105,8 @@
           </select>
         </div>
        
-        <div class="col-2 mb-2">
-          <label for="">Cantidad letras</label>
+        <div class="col-3">
+          <label for="">Cantidad min. letras</label>
           <select  bind:value={numberLetters} class="form-select">
             <option value=1>1</option>
             <option value=2>2</option>
@@ -124,10 +120,17 @@
             <option value=10>10</option>
           </select>
         </div>
+        
+        <div class="col mt-4">
+          <label>
+            <input type="checkbox" bind:checked={isChecked} on:input={actualizar} />
+            Distinguir entre Mayúsculas y minúsculas
+          </label>
+        </div>
 
         {#if OmitWord_enabled}
           <div class="input-group mb-2 mt-2">
-            <span class="input-group-text" id="basic-addon1" >Palabras a omitir:</span>
+            <span class="input-group-text">Palabras a omitir:</span>
             <input
               type="text"
               class="form-control"
@@ -135,12 +138,11 @@
               aria-label="Username"
               aria-describedby="basic-addon1"
               bind:value={omitWords}
-              on:input={actualizar}
             />
           </div>
         {/if}
-        <div class="col-8">
-          <button class="btn btn-primary mt-3" on:click={valideData}>Aceptar</button>
+        <div class="col d-flex justify-content-center">
+          <button class="btn btn-primary w-100" on:click={actualizar}><b>Aceptar</b></button>
         </div>
       </div>
     </div>
@@ -149,13 +151,13 @@
   {#if table_enabled}
     <div class="card shadow p-3 mb-5 bg-body rounded">
       {#if words.size > 0}
-        <table class="table">
+        <table class="table text-center">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Palabras</th>
-              <th scope="col"># Repeticiones</th>
-              <th scope="col">Borrar</th>
+              <th scope="col" class="col-1">#</th>
+              <th scope="col" class="col-2">Palabras ({words.size})</th>
+              <th scope="col" class="col-1"># Repeticiones</th>
+              <th scope="col" class="col-2">Borrar</th>
             </tr>
           </thead>
           <tbody>
@@ -177,7 +179,7 @@
           </tbody>
         </table>
       {:else}
-        <h3>No hay palabras repetidas</h3>
+        <h3>{mensaje}</h3>
       {/if}
     </div>
   {/if}
