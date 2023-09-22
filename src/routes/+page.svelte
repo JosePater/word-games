@@ -37,7 +37,8 @@
 
   function filterWords() {
     words.clear(); 
-    let allWords_signs = prompt.split(' '); // Array de palabras del prompt
+    let textWithoutLineBreaks = prompt.replace(/\n/g, ' '); // Reemplaza '\n' por ' '
+    let allWords_signs = textWithoutLineBreaks.split(' '); // Array de palabras del prompt
     let words_without_signs = []; // Palabras filtradas (omitidas y tamaño)
 
     // Quitar las palabras omitidas y las <= x letras
