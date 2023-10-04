@@ -1,19 +1,21 @@
 <script>
   $: prompt = '';
   $: table_enabled = false;
-  let omitir = 'No'; 
+  let omitir = 'No';
   $: OmitWord_enabled = false; // input palabras a omitir: deshabilitado
-  let numberLetters = '3'; // Cantidad de letras 
+  let numberLetters = '3'; // Cantidad de letras
   let isChecked = false; // Checkbox Aaa == aaa
   let mensaje = '';
   let inicio = false;
 
   // Palabras y signos a omitir
   let omitWords = []; // ['de','del','la','lo','le','las','los','por','para','por','como','con','que','un','una','pues',];
-  let signos = ['.', ',', ';', ':', '?', '!', '¿',"'",'"']; 
+  let signos = ['.', ',', ';', ':', '?', '!', '¿', "'", '"'];
   let words = new Map();
 
-  $: omitir == "Sí" ? OmitWord_enabled = true : (OmitWord_enabled = false, omitWords = [], actualizar());
+  $: omitir == 'Sí'
+    ? (OmitWord_enabled = true)
+    : ((OmitWord_enabled = false), (omitWords = []), actualizar());
   $: numberLetters > 0 ? actualizar() : actualizar();
 
   function iniciar() {
@@ -23,18 +25,28 @@
 
   function actualizar() {
     if (inicio) {
-      prompt.trim() != '' ?  mensaje = '😎 ¡No hay palabras repetidas!' : mensaje = '😜 ¡No hay texto!';
-      setTimeout(() => {
-          filterWords()
-      }, 300, table_enabled = false)  
+      prompt.trim() != ''
+        ? (mensaje = '😎 ¡No hay palabras repetidas!')
+        : (mensaje = '😜 ¡No hay texto!');
+      setTimeout(
+        () => {
+          filterWords();
+        },
+        300,
+        (table_enabled = false)
+      );
     }
   }
 
   function borrar(key) {
-    setTimeout(() => {
-      words.delete(key);
-      table_enabled = true;
-    }, 100, table_enabled = false)  
+    setTimeout(
+      () => {
+        words.delete(key);
+        table_enabled = true;
+      },
+      100,
+      (table_enabled = false)
+    );
   }
 
   function filterWords() {
@@ -58,13 +70,14 @@
     words_without_signs.forEach((palabra) => {
       let cant = 1;
       // Check Aaaa != aaaa
-      if (isChecked == false){
-        palabra = palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();; // Aaaa
+      if (isChecked == false) {
+        palabra =
+          palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase(); // Aaaa
       }
       if (palabra.length >= numberLetters) {
         if (!omitWords.includes(palabra)) {
           if (words.has(palabra)) {
-            cant = words.get(palabra) + 1;  // Sumar las palabras repetidas
+            cant = words.get(palabra) + 1; // Sumar las palabras repetidas
             words.set(palabra, cant);
           }
           if (!words.has(palabra)) {
@@ -108,30 +121,34 @@
         <div class="col-2 mb-2 size-screen">
           <label for="">Omitir palabras</label>
           <select bind:value={omitir} class="form-select">
-			      <option selected value="No">No</option>
+            <option selected value="No">No</option>
             <option value="Sí">Sí</option>
           </select>
         </div>
-       
+
         <div class="col-3 size-screen2">
           <label for="">Cantidad min. letras</label>
-          <select  bind:value={numberLetters} class="form-select">
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option selected value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-            <option value=6>6</option>
-            <option value=7>7</option>
-            <option value=8>8</option>
-            <option value=9>9</option>
-            <option value=10>10</option>
+          <select bind:value={numberLetters} class="form-select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option selected value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
           </select>
         </div>
-        
+
         <div class="col size-screen">
           <label>
-            <input type="checkbox" bind:checked={isChecked} on:input={actualizar} />
+            <input
+              type="checkbox"
+              bind:checked={isChecked}
+              on:input={actualizar}
+            />
             Distinguir entre Mayúsculas y minúsculas
           </label>
         </div>
@@ -150,20 +167,22 @@
           </div>
         {/if}
         <div class="col size-screen">
-          <button class="btn btn-primary w-100" on:click={iniciar}><b>Aceptar</b></button>
+          <button class="btn btn-primary w-100" on:click={iniciar}
+            ><b>Aceptar</b></button
+          >
         </div>
       </div>
     </div>
   </div>
-  
+
   {#if table_enabled}
     <div class="card shadow p-3 mb-4 bg-body rounded mx-auto size-screen4">
       {#if words.size > 0}
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Palabras ({words.size})</th>
+              <th scope="col"># ({words.size})</th>
+              <th scope="col">Palabras</th>
               <th scope="col">Cantidad</th>
               <th scope="col">Borrar</th>
             </tr>
@@ -178,7 +197,7 @@
                   <button
                     class="btn btn-danger"
                     on:click={() => {
-                      borrar(key)
+                      borrar(key);
                     }}>Borrar</button
                   >
                 </td>
@@ -194,27 +213,28 @@
 </section>
 
 <style>
-  @media screen and (max-width:800px){
-    .size-screen{
-        display: block;
-        width: fit-content;
+  @media screen and (max-width: 800px) {
+    .size-screen {
+      display: block;
+      width: fit-content;
     }
-    .size-screen3{
-        width: fit-content;
-    }
-  }
-  @media screen and (max-width:485px){
-    .size-screen2{
-        display: block;
-        width: fit-content;
+    .size-screen3 {
+      width: fit-content;
     }
   }
-  @media screen and (max-width:460px){
-    .size-screen4{
-        display: block;
-        overflow: auto;
+  @media screen and (max-width: 485px) {
+    .size-screen2 {
+      display: block;
+      width: fit-content;
     }
-    table, button{
+  }
+  @media screen and (max-width: 460px) {
+    .size-screen4 {
+      display: block;
+      overflow: auto;
+    }
+    table,
+    button {
       font-size: 13px;
       margin: 0;
       padding: 5px;
