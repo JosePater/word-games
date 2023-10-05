@@ -63,13 +63,13 @@
   }
 
   h1 {
-    font-size:34px;
+    font-size:30px;
     color: #250303;
     margin-top: 0;
   }
 
   p {
-    font-size: 20px;
+    font-size: 16px;
     line-height: 1.5;
     color: #302e2e;
   }
@@ -82,21 +82,31 @@
   }
 
   li {
-    font-size: 20px;
+    font-size: 16px;
     color: #302e2e;
     margin-bottom: 10px;
   }
 
   /* Estilos para el autor */
   h2 {
-    font-size: 30px;
+    font-size: 24px;
     color: #302e2e;
     margin-top: 30px;
   }
 
   p.author {
-    font-size: 20px;
+    font-size: 16px;
     color: #302e2e;
     font-style: italic;
+  }
+  @media screen and (max-width: 600px) {
+    ol {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      margin-left: -5px;
+
+    }
   }
 </style>

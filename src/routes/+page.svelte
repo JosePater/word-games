@@ -103,21 +103,21 @@
 </svelte:head>
 
 <section>
-  <h1><b>CONTADOR DE PALABRAS</b></h1>
+  <h1 class="title"><b>CONTADOR DE PALABRAS</b></h1>
 
   <div class="card shadow p-3 mb-4 bg-body rounded mx-auto">
     <div class="card-body">
-      <h5 class="card-title fs-1">Ingresa un texto</h5>
+      <h5 class="card-title fs-6">Ingresa un texto</h5>
       <div class="form-floating mb-5">
         <textarea
           placeholder="Escribe el texto"
-          style="height: 200px"
+          style="height: 280px"
           class="form-control"
           bind:value={prompt}
         />
       </div>
       <div class="row mt-2 d-flex justify-content-center align-items-center">
-        <h3>Filtrar palabras</h3>
+        <h5 class="fs-6">Filtrar palabras</h5>
         <div class="col-2 mb-2 size-screen">
           <label for="">Omitir palabras</label>
           <select bind:value={omitir} class="form-select">
@@ -167,7 +167,7 @@
           </div>
         {/if}
         <div class="col size-screen">
-          <button class="btn btn-primary w-100" on:click={iniciar}
+          <button class="btn btn-primary w-100 mt-2" on:click={iniciar}
             ><b>Aceptar</b></button
           >
         </div>
@@ -213,6 +213,17 @@
 </section>
 
 <style>
+  .title {
+    font-size: 25px;
+  }
+  .card,
+  select,
+  button {
+    font-size: 14px;
+  }
+  h5 {
+    margin-top: -20px;
+  }
   @media screen and (max-width: 800px) {
     .size-screen {
       display: block;
@@ -227,6 +238,9 @@
       display: block;
       width: fit-content;
     }
+    textarea {
+      margin: 0;
+    }
   }
   @media screen and (max-width: 460px) {
     .size-screen4 {
@@ -235,9 +249,11 @@
     }
     table,
     button {
-      font-size: 13px;
       margin: 0;
       padding: 5px;
+    }
+    .title {
+      font-size: 20px;
     }
   }
 </style>
